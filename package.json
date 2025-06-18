@@ -1,0 +1,34 @@
+{
+  "name": "circular-text",
+  "version": "1.0.0",
+  "description": "Display text in a circle.",
+  "main": "serve.js",
+  "type": "module",
+  "author": "Ian Yong (iantomarcello)",
+  "license": "ISC",
+  "exports": {
+    ".": {
+      "import": "./dist/circular-text.es.js",
+      "require": "./dist/circular-text.umd.js"
+    }
+  },
+  "types": "types/circular-text.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "start": "vite --port 3843",
+    "dev": "vite",
+    "build": "npm run build:default && npm run build:browser",
+    "build:default": "tsc && vite build",
+    "build:browser": "tsc && vite build -c vite.browser.config.ts"
+  },
+  "dependencies": {
+    "lit": "^3.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  }
+}
