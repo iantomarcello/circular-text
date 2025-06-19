@@ -54,7 +54,7 @@
       const prop = gui.addFolder('Properties');
       prop.open();
       prop.add(variables, 'content').onChange(v => merry.innerText = v);
-      prop.add(variables, '--spacing', 1, 10, 0.1).onChange(v => merry.style.setProperty('--spacing', v));
+      prop.add(variables, '--spacing', 0, 10, 0.1).onChange(v => merry.style.setProperty('--spacing', v));
       prop.add(variables, '--offset', 1, 360, 1).onChange(v => merry.style.setProperty('--offset', v));
 
       const misc = gui.addFolder('Misc');

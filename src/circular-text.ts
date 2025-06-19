@@ -37,8 +37,9 @@ export class CircularText extends LitElement {
         rotate: calc(sibling-index() * (4deg * var(--spacing)) + (var(--offset) * 1deg));
       }
 
-      @container style(--spacing: full) {
-        rotate: calc((sibling-index() / sibling-count() * 360deg) + (var(--offset) * 1deg));
+      /** Goes full circle */
+      @container style(--spacing: 0) {
+        rotate: calc((sibling-index() / sibling-count() * 359deg) + (var(--offset) * 1deg));
       }
     }
   `];
