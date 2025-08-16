@@ -12,6 +12,7 @@ export class CircularText extends LitElement {
   static styles = [css`
     :host {
       --offset: 0;
+      --flip: 1;
       --spacing: 1;
       display: block;
       aspect-ratio: 1;
@@ -42,11 +43,25 @@ export class CircularText extends LitElement {
         rotate: calc((sibling-index() / sibling-count() * 359deg) + (var(--offset) * 1deg));
       }
     }
+
+    .letter {
+      position: absolute;
+      transform-origin: center;
+      translate: -50% 0%;
+
+      scale: if(
+        style(--flip: 1): -1 -1;
+      );
+    }
   `];
 
   get _slottedChildren() {
     const slot = this.shadowRoot?.querySelector('slot');
     return slot?.assignedNodes({ flatten: true }) || [];
+  }
+
+  requestUpdate = () => {
+    super.requestUpdate()
   }
 
   protected firstUpdated(_changedProperties: PropertyValues): void {
@@ -57,18 +72,40 @@ export class CircularText extends LitElement {
       });
       this._slottedChildren.length > 0 && slot.setAttribute('hidden', '');
     }
+
+    this.addEventListener('pointerenter', this.requestUpdate);
+    this.addEventListener('pointerleave', this.requestUpdate);
+    this.addEventListener('focus', this.requestUpdate);
+    this.addEventListener('blur', this.requestUpdate);
+  }
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.removeEventListener('pointerenter', this.requestUpdate);
+    this.removeEventListener('pointerleave', this.requestUpdate);
+    this.removeEventListener('focus', this.requestUpdate);
+    this.removeEventListener('blur', this.requestUpdate);
   }
 
   render() {
-      return html`
+    const isFlip = getComputedStyle(this).getPropertyValue('--flip') === '1';
+    return html`
       <slot></slot>
       <div class="ring">
         ${this._slottedChildren?.length < 1 ? 'null' : this._slottedChildren?.map((node) => {
           const text: string = node.textContent?.trim() as string;
-          return [...text.split('')]?.map((letter, index) => html`<span class="character" style="--index: ${index}">${letter}</span>`)
+          let texts = text.split('');
+          if (isFlip) texts = texts.reverse();
+          return texts?.map((letter, index) => html`
+            <span class="character" style="--index: ${index}">
+              <span class="letter">
+                ${letter}
+              </span>
+            </span>
+          `)
         })}
       </div>
-      `;
+    `;
   }
 }
 declare global {

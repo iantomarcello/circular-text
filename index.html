@@ -32,6 +32,7 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         --spacing: 2.5;
         --offset: 0;
+        --flip: 0;
       }
     </style>
   </head>
@@ -48,6 +49,7 @@
         fontSize: 58,
         '--spacing': 2.5,
         '--offset': 0,
+        '--flip': 0,
       }
       const gui = new dat.GUI();
       gui.width = 360;
@@ -56,6 +58,10 @@
       prop.add(variables, 'content').onChange(v => merry.innerText = v);
       prop.add(variables, '--spacing', 0, 10, 0.1).onChange(v => merry.style.setProperty('--spacing', v));
       prop.add(variables, '--offset', 1, 360, 1).onChange(v => merry.style.setProperty('--offset', v));
+      prop.add(variables, '--flip', 0, 1, 1).onChange(v => {
+        merry.style.setProperty('--flip', v)
+        merry.requestUpdate();
+      });
 
       const misc = gui.addFolder('Misc');
       misc.open();
